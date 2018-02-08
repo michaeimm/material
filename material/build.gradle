@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
+        minSdkVersion 14
+        targetSdkVersion 27
         versionCode 21
         versionName "1.2.4"
     }
@@ -18,19 +18,10 @@ android {
     }
 }
 
-ext{
-    libSupportVersion = '23.4.0'
-}
-
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support:appcompat-v7:${libSupportVersion}"
-    compile "com.android.support:cardview-v7:${libSupportVersion}"
-    compile "com.android.support:recyclerview-v7:${libSupportVersion}"
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    api "com.android.support:appcompat-v7:$project.libSupportVersion"
+    api "com.android.support:cardview-v7:$project.libSupportVersion"
+    api "com.android.support:recyclerview-v7:$project.libSupportVersion"
 }
-
-// Place it at the end of the file
-apply from: "$rootProject.projectDir/dist/distInfo.gradle"
-apply from: "$rootProject.projectDir/dist/bintray.gradle"
-apply from: "$rootProject.projectDir/dist/maven.gradle"

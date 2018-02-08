@@ -5,15 +5,15 @@
         <item name="android:windowExitAnimation">@null</item>
     </style>
 
-    <style name="Material"></style>
+    <style name="Material" />
 
-    <style name="Material.Drawable"></style>
+    <style name="Material.Drawable" />
 
-    <style name="Material.Widget"></style>
+    <style name="Material.Widget" />
 
-    <style name="Material.App"></style>
+    <style name="Material.App" />
 
-    <style name="Material.TextAppearance"></style>
+    <style name="Material.TextAppearance" />
 
     <style name="Material.Drawable.CircularProgress">
         <item name="cpd_padding">0dp</item>
@@ -186,7 +186,7 @@
         <item name="rbd_innerRadius">5dp</item>
         <item name="rbd_animDuration">@android:integer/config_mediumAnimTime</item>
     </style>
-    
+
     <style name="Material.Drawable.CheckBox">
         <item name="cbd_width">32dp</item>
         <item name="cbd_height">32dp</item>

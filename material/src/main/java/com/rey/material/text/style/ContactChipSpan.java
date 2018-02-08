@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.text.BoringLayout;
 import android.text.Layout;
 import android.text.TextPaint;
@@ -68,15 +69,15 @@ public class ContactChipSpan extends ReplacementSpan {
         mBoringLayout = BoringLayout.make(mContactName, mTextPaint, outerWidth, Layout.Alignment.ALIGN_NORMAL, 1f, 1f, mMetrics, true, TextUtils.TruncateAt.END, outerWidth);
     }
 
-    public void setImage(Bitmap bm){
-        if(mBitmap != bm){
+    public void setImage(Bitmap bm) {
+        if (mBitmap != bm) {
             mBitmap = bm;
-            if(mBitmap != null) {
+            if (mBitmap != null) {
                 mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
                 mMatrix.reset();
-                float scale = mHeight / (float)Math.min(mBitmap.getWidth(), mBitmap.getHeight());
+                float scale = mHeight / (float) Math.min(mBitmap.getWidth(), mBitmap.getHeight());
                 mMatrix.setScale(scale, scale, 0, 0);
-                mMatrix.postTranslate((mHeight  - mBitmap.getWidth() * scale) / 2, (mHeight - mBitmap.getHeight() * scale) / 2);
+                mMatrix.postTranslate((mHeight - mBitmap.getWidth() * scale) / 2, (mHeight - mBitmap.getHeight() * scale) / 2);
 
                 mBitmapShader.setLocalMatrix(mMatrix);
             }
@@ -84,7 +85,7 @@ public class ContactChipSpan extends ReplacementSpan {
     }
 
     @Override
-    public int getSize(Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt fm) {
+    public int getSize(@NonNull Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt fm) {
         if (fm != null) {
             int cy = (fm.ascent + fm.descent) / 2;
             fm.ascent = Math.min(fm.ascent, cy - mHeight / 2);
@@ -97,7 +98,7 @@ public class ContactChipSpan extends ReplacementSpan {
     }
 
     @Override
-    public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
+    public void draw(@NonNull Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, @NonNull Paint paint) {
         canvas.save();
 
         canvas.translate(x, top);
@@ -112,12 +113,12 @@ public class ContactChipSpan extends ReplacementSpan {
         mRect.set(halfHeight, 0, mWidth - halfHeight, mHeight);
         canvas.drawRect(mRect, mPaint);
 
-        if(mBitmap != null){
+        if (mBitmap != null) {
             mPaint.setShader(mBitmapShader);
             canvas.drawCircle(halfHeight, halfHeight, halfHeight, mPaint);
         }
 
-        if(mContactName != null && mBoringLayout != null) {
+        if (mContactName != null && mBoringLayout != null) {
             canvas.translate(mHeight + mPaddingLeft, (mHeight - mBoringLayout.getHeight()) / 2f);
             mBoringLayout.draw(canvas);
         }

@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 
@@ -22,15 +23,20 @@ public class CircleDrawable extends Drawable implements Animatable {
     private long mStartTime;
     private float mAnimProgress;
     private int mAnimDuration = 1000;
+    private final Runnable mUpdater = new Runnable() {
+
+        @Override
+        public void run() {
+            update();
+        }
+
+    };
     private Interpolator mInInterpolator = new DecelerateInterpolator();
     private Interpolator mOutInterpolator = new DecelerateInterpolator();
-
     private Paint mPaint;
-
     private float mX;
     private float mY;
     private float mRadius;
-
     private boolean mVisible;
     private boolean mInEditMode = false;
     private boolean mAnimEnable = true;
@@ -89,7 +95,7 @@ public class CircleDrawable extends Drawable implements Animatable {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         if (!mRunning) {
             if (mVisible)
                 canvas.drawCircle(mX, mY, mRadius, mPaint);
@@ -139,19 +145,10 @@ public class CircleDrawable extends Drawable implements Animatable {
     }
 
     @Override
-    public void scheduleSelf(Runnable what, long when) {
+    public void scheduleSelf(@NonNull Runnable what, long when) {
         mRunning = true;
         super.scheduleSelf(what, when);
     }
-
-    private final Runnable mUpdater = new Runnable() {
-
-        @Override
-        public void run() {
-            update();
-        }
-
-    };
 
     private void update() {
         long curTime = SystemClock.uptimeMillis();

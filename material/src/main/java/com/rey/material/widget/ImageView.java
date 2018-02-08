@@ -16,9 +16,9 @@ import com.rey.material.util.ViewUtil;
  */
 public class ImageView extends AppCompatImageView implements ThemeManager.OnThemeChangedListener {
 
-    private RippleManager mRippleManager;
     protected int mStyleId;
     protected int mCurrentStyle = ThemeManager.THEME_UNDEFINED;
+    private RippleManager mRippleManager;
 
     public ImageView(Context context) {
         super(context);
@@ -38,25 +38,25 @@ public class ImageView extends AppCompatImageView implements ThemeManager.OnThem
         init(context, attrs, defStyleAttr, 0);
     }
 
-    protected void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes){
+    protected void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         applyStyle(context, attrs, defStyleAttr, defStyleRes);
-        if(!isInEditMode())
+        if (!isInEditMode())
             mStyleId = ThemeManager.getStyleId(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public void applyStyle(int resId){
+    public void applyStyle(int resId) {
         ViewUtil.applyStyle(this, resId);
         applyStyle(getContext(), null, 0, resId);
     }
 
-    protected void applyStyle(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes){
+    protected void applyStyle(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         getRippleManager().onCreate(this, context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override
     public void onThemeChanged(ThemeManager.OnThemeChangedEvent event) {
         int style = ThemeManager.getInstance().getCurrentStyle(mStyleId);
-        if(mCurrentStyle != style){
+        if (mCurrentStyle != style) {
             mCurrentStyle = style;
             applyStyle(mCurrentStyle);
         }
@@ -65,7 +65,7 @@ public class ImageView extends AppCompatImageView implements ThemeManager.OnThem
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if(mStyleId != 0) {
+        if (mStyleId != 0) {
             ThemeManager.getInstance().registerOnThemeChangedListener(this);
             onThemeChanged(null);
         }
@@ -75,23 +75,23 @@ public class ImageView extends AppCompatImageView implements ThemeManager.OnThem
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         RippleManager.cancelRipple(this);
-        if(mStyleId != 0)
+        if (mStyleId != 0)
             ThemeManager.getInstance().unregisterOnThemeChangedListener(this);
     }
 
     @Override
     public void setBackgroundDrawable(Drawable drawable) {
         Drawable background = getBackground();
-        if(background instanceof RippleDrawable && !(drawable instanceof RippleDrawable))
+        if (background instanceof RippleDrawable && !(drawable instanceof RippleDrawable))
             ((RippleDrawable) background).setBackgroundDrawable(drawable);
         else
             super.setBackgroundDrawable(drawable);
     }
 
-    protected RippleManager getRippleManager(){
-        if(mRippleManager == null){
-            synchronized (RippleManager.class){
-                if(mRippleManager == null)
+    protected RippleManager getRippleManager() {
+        if (mRippleManager == null) {
+            synchronized (RippleManager.class) {
+                if (mRippleManager == null)
                     mRippleManager = new RippleManager();
             }
         }
@@ -113,7 +113,7 @@ public class ImageView extends AppCompatImageView implements ThemeManager.OnThem
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         boolean result = super.onTouchEvent(event);
-        return  getRippleManager().onTouchEvent(this, event) || result;
+        return getRippleManager().onTouchEvent(this, event) || result;
     }
 
 }

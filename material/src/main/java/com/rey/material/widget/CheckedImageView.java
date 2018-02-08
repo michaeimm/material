@@ -9,11 +9,10 @@ import android.widget.Checkable;
  */
 public class CheckedImageView extends ImageView implements Checkable {
 
-    private boolean mChecked = false;
-
     private static final int[] STATE_CHECKED = new int[]{
-        android.R.attr.state_checked
+            android.R.attr.state_checked
     };
+    private boolean mChecked = false;
 
     public CheckedImageView(Context context) {
         super(context);
@@ -28,16 +27,16 @@ public class CheckedImageView extends ImageView implements Checkable {
     }
 
     @Override
-    public void setChecked(boolean b) {
-        if(mChecked != b){
-            mChecked = b;
-            refreshDrawableState();
-        }
+    public boolean isChecked() {
+        return mChecked;
     }
 
     @Override
-    public boolean isChecked() {
-        return mChecked;
+    public void setChecked(boolean b) {
+        if (mChecked != b) {
+            mChecked = b;
+            refreshDrawableState();
+        }
     }
 
     @Override

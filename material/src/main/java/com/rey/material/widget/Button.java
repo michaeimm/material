@@ -11,12 +11,11 @@ import com.rey.material.app.ThemeManager;
 import com.rey.material.drawable.RippleDrawable;
 import com.rey.material.util.ViewUtil;
 
-public class Button extends AppCompatButton implements ThemeManager.OnThemeChangedListener{
-
-	private RippleManager mRippleManager;
+public class Button extends AppCompatButton implements ThemeManager.OnThemeChangedListener {
 
     protected int mStyleId;
     protected int mCurrentStyle = ThemeManager.THEME_UNDEFINED;
+    private RippleManager mRippleManager;
 
     public Button(Context context) {
         super(context);
@@ -30,25 +29,25 @@ public class Button extends AppCompatButton implements ThemeManager.OnThemeChang
         init(context, attrs, 0, 0);
     }
 
-	public Button(Context context, AttributeSet attrs, int defStyleAttr) {
-		super(context, attrs, defStyleAttr);
-		
-		init(context, attrs, defStyleAttr, 0);
-	}
+    public Button(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
 
-	protected void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes){
+        init(context, attrs, defStyleAttr, 0);
+    }
+
+    protected void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         ViewUtil.applyFont(this, attrs, defStyleAttr, defStyleRes);
         applyStyle(context, attrs, defStyleAttr, defStyleRes);
-        if(!isInEditMode())
+        if (!isInEditMode())
             mStyleId = ThemeManager.getStyleId(context, attrs, defStyleAttr, defStyleRes);
-	}
+    }
 
-    public void applyStyle(int resId){
+    public void applyStyle(int resId) {
         ViewUtil.applyStyle(this, resId);
         applyStyle(getContext(), null, 0, resId);
     }
 
-    protected void applyStyle(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes){
+    protected void applyStyle(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         getRippleManager().onCreate(this, context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -65,7 +64,7 @@ public class Button extends AppCompatButton implements ThemeManager.OnThemeChang
     @Override
     public void onThemeChanged(ThemeManager.OnThemeChangedEvent event) {
         int style = ThemeManager.getInstance().getCurrentStyle(mStyleId);
-        if(mCurrentStyle != style){
+        if (mCurrentStyle != style) {
             mCurrentStyle = style;
             applyStyle(mCurrentStyle);
         }
@@ -74,7 +73,7 @@ public class Button extends AppCompatButton implements ThemeManager.OnThemeChang
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if(mStyleId != 0) {
+        if (mStyleId != 0) {
             ThemeManager.getInstance().registerOnThemeChangedListener(this);
             onThemeChanged(null);
         }
@@ -84,23 +83,23 @@ public class Button extends AppCompatButton implements ThemeManager.OnThemeChang
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         RippleManager.cancelRipple(this);
-        if(mStyleId != 0)
+        if (mStyleId != 0)
             ThemeManager.getInstance().unregisterOnThemeChangedListener(this);
     }
 
     @Override
     public void setBackgroundDrawable(Drawable drawable) {
         Drawable background = getBackground();
-        if(background instanceof RippleDrawable && !(drawable instanceof RippleDrawable))
+        if (background instanceof RippleDrawable && !(drawable instanceof RippleDrawable))
             ((RippleDrawable) background).setBackgroundDrawable(drawable);
         else
             super.setBackgroundDrawable(drawable);
     }
 
-    protected RippleManager getRippleManager(){
-        if(mRippleManager == null){
-            synchronized (RippleManager.class){
-                if(mRippleManager == null)
+    protected RippleManager getRippleManager() {
+        if (mRippleManager == null) {
+            synchronized (RippleManager.class) {
+                if (mRippleManager == null)
                     mRippleManager = new RippleManager();
             }
         }
@@ -109,7 +108,7 @@ public class Button extends AppCompatButton implements ThemeManager.OnThemeChang
     }
 
     @Override
-	public void setOnClickListener(OnClickListener l) {
+    public void setOnClickListener(OnClickListener l) {
         RippleManager rippleManager = getRippleManager();
         if (l == rippleManager)
             super.setOnClickListener(l);
@@ -117,12 +116,12 @@ public class Button extends AppCompatButton implements ThemeManager.OnThemeChang
             rippleManager.setOnClickListener(l);
             setOnClickListener(rippleManager);
         }
-	}
-	
-	@Override
+    }
+
+    @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-		boolean result = super.onTouchEvent(event);
-		return  getRippleManager().onTouchEvent(this, event) || result;
-	}
+        boolean result = super.onTouchEvent(event);
+        return getRippleManager().onTouchEvent(this, event) || result;
+    }
 
 }

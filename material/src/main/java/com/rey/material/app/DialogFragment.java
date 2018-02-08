@@ -10,67 +10,26 @@ import android.view.View;
 /**
  * Created by Rey on 1/12/2015.
  */
-public class DialogFragment extends android.support.v4.app.DialogFragment{
-
-    /**
-     * Interface definition for passing style data.
-     */
-    public interface Builder{
-        /**
-         * Get a Dialog instance used for this fragment.
-         * @param context A Context instance.
-         * @return The Dialog will be used for this fragment.
-         */
-        public Dialog build(Context context);
-
-        /**
-         * Handle click event on Positive Action.
-         */
-        public void onPositiveActionClicked(DialogFragment fragment);
-
-        /**
-         * Handle click event on Negative Action.
-         */
-        public void onNegativeActionClicked(DialogFragment fragment);
-
-        /**
-         * Handle click event on Neutral Action.
-         */
-        public void onNeutralActionClicked(DialogFragment fragment);
-
-        /**
-         * Handle OnCancel event of dialog.
-         * @param dialog
-         */
-        public void onCancel(DialogInterface dialog);
-
-        /**
-         * Handle OnDismiss event of dialog.
-         * @param dialog
-         */
-        public void onDismiss(DialogInterface dialog);
-    }
+public class DialogFragment extends android.support.v4.app.DialogFragment {
 
     protected static final String ARG_BUILDER = "arg_builder";
-
     protected Builder mBuilder;
-
     private View.OnClickListener mActionListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(mBuilder == null)
+            if (mBuilder == null)
                 return;
 
-            if(v.getId() == Dialog.ACTION_POSITIVE)
+            if (v.getId() == Dialog.ACTION_POSITIVE)
                 mBuilder.onPositiveActionClicked(DialogFragment.this);
-            else if(v.getId() == Dialog.ACTION_NEGATIVE)
+            else if (v.getId() == Dialog.ACTION_NEGATIVE)
                 mBuilder.onNegativeActionClicked(DialogFragment.this);
-            else if(v.getId() == Dialog.ACTION_NEUTRAL)
+            else if (v.getId() == Dialog.ACTION_NEUTRAL)
                 mBuilder.onNeutralActionClicked(DialogFragment.this);
         }
     };
 
-    public static DialogFragment newInstance(Builder builder){
+    public static DialogFragment newInstance(Builder builder) {
         DialogFragment fragment = new DialogFragment();
         fragment.mBuilder = builder;
         return fragment;
@@ -89,7 +48,7 @@ public class DialogFragment extends android.support.v4.app.DialogFragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null && mBuilder == null)
+        if (savedInstanceState != null && mBuilder == null)
             mBuilder = savedInstanceState.getParcelable(ARG_BUILDER);
     }
 
@@ -97,16 +56,16 @@ public class DialogFragment extends android.support.v4.app.DialogFragment{
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if(mBuilder != null && mBuilder instanceof Parcelable)
-            outState.putParcelable(ARG_BUILDER, (Parcelable)mBuilder);
+        if (mBuilder != null && mBuilder instanceof Parcelable)
+            outState.putParcelable(ARG_BUILDER, (Parcelable) mBuilder);
     }
 
     @Override
     public void onDestroyView() {
         android.app.Dialog dialog = getDialog();
 
-        if(dialog != null && dialog instanceof Dialog)
-            ((Dialog)dialog).dismissImmediately();
+        if (dialog != null && dialog instanceof Dialog)
+            ((Dialog) dialog).dismissImmediately();
 
         super.onDestroyView();
     }
@@ -121,5 +80,47 @@ public class DialogFragment extends android.support.v4.app.DialogFragment{
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         mBuilder.onDismiss(dialog);
+    }
+
+    /**
+     * Interface definition for passing style data.
+     */
+    public interface Builder {
+        /**
+         * Get a Dialog instance used for this fragment.
+         *
+         * @param context A Context instance.
+         * @return The Dialog will be used for this fragment.
+         */
+        Dialog build(Context context);
+
+        /**
+         * Handle click event on Positive Action.
+         */
+        void onPositiveActionClicked(DialogFragment fragment);
+
+        /**
+         * Handle click event on Negative Action.
+         */
+        void onNegativeActionClicked(DialogFragment fragment);
+
+        /**
+         * Handle click event on Neutral Action.
+         */
+        void onNeutralActionClicked(DialogFragment fragment);
+
+        /**
+         * Handle OnCancel event of dialog.
+         *
+         * @param dialog
+         */
+        void onCancel(DialogInterface dialog);
+
+        /**
+         * Handle OnDismiss event of dialog.
+         *
+         * @param dialog
+         */
+        void onDismiss(DialogInterface dialog);
     }
 }
